@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class Letter : MonoBehaviour
   public char letter_char;
 
   private LetterStatus currentStatus;
+  private Color initColor;
 
   public LetterStatus status
   {
@@ -32,12 +34,17 @@ public class Letter : MonoBehaviour
     }
   }
 
+  private void Start()
+  {
+    initColor = image_letterColor.color;
+  }
+
   private void SetLetterColor(LetterStatus newStatus)
   {
     switch (status)
     {
       case LetterStatus.None:
-        image_letterColor.color = Color.gray;
+        image_letterColor.color = new Color(0.2f, 0.2f, 0.2f);
         break;
       case LetterStatus.Exist:
         image_letterColor.color = Color.yellow;
@@ -51,12 +58,24 @@ public class Letter : MonoBehaviour
   public void SetLetterChar(char ch)
   {
     letter_char = ch;
-    text_letter.text = ch.ToString().ToUpper();
+    if (text_letter != null)
+    {
+      text_letter.text = ch.ToString().ToUpper();
+    }
   }
   public void DeleteLetterChar()
   {
     letter_char = '-';
-    text_letter.text = "";
+    if (text_letter != null)
+    {
+      text_letter.text = "";
+    }
+  }
+
+  public void ResetLetter()
+  {
+    status = LetterStatus.Wait;
+    image_letterColor.color = initColor;
   }
 
 }
